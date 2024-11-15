@@ -4,12 +4,12 @@ resources:
   - repository: ProcMon
     type: github
     endpoint: sysinternals
-    name: sysinternals/ProcMon-for-Linux
+    name: microsoft/ProcMon-for-Linux
 
   - repository: SysinternalsEBPF
     type: github
     endpoint: sysinternals
-    name: sysinternals/SysinternalsEBPF
+    name: microsoft/SysinternalsEBPF
 
 trigger:
     branches:
