@@ -33,7 +33,7 @@ Column::Column(int height, int width, int y, int x, std::string columnName)
     this->columnData.clear();
 
     // Add Header to window
-    columnPrintFill(COLUMN_HEADER_COLOR, 0, 0, (columnName + ":").c_str());
+    columnPrintFill(COLUMN_HEADER_COLOR, 0, 0, "%s", (columnName + ":").c_str());
 
     this->currentLine = 1;                          // init to 1 to account for column header
     this->highlight = false;                        // init header highlight to off
@@ -56,7 +56,7 @@ void Column::addLine(std::string value)
     columnData.push_back(value);
 
     // write string to screen
-    columnPrintFill(LINE_COLOR, 0, this->currentLine, value.c_str());
+    columnPrintFill(LINE_COLOR, 0, this->currentLine, "%s", value.c_str());
     this->currentLine++;
 }
 
@@ -73,7 +73,7 @@ void Column::setLineColor(int y, int color)
 {
     if(y - 1 < columnData.size())
     {
-        columnPrintFill(color, 0, y, columnData[y - 1].c_str());
+        columnPrintFill(color, 0, y, "%s", columnData[y - 1].c_str());
     }
 }
 
@@ -82,12 +82,12 @@ void Column::toggleHeaderHighlight()
     if(highlight)
     {
         highlight = false;
-        columnPrintFill(COLUMN_HEADER_COLOR, 0, 0, (columnName + ":").c_str());
+        columnPrintFill(COLUMN_HEADER_COLOR, 0, 0, "%s", (columnName + ":").c_str());
     }
     else
     {
         highlight = true;
-        columnPrintFill(HIGHLIGHT_COLOR, 0, 0, (columnName + ":").c_str());
+        columnPrintFill(HIGHLIGHT_COLOR, 0, 0, "%s", (columnName + ":").c_str());
     }
 }
 
@@ -99,12 +99,12 @@ void Column::redrawColumn()
     clearColumn();
 
     // redraw header
-    if(highlight) columnPrintFill(HIGHLIGHT_COLOR, 0, 0, (columnName + ":").c_str());
-    else columnPrintFill(COLUMN_HEADER_COLOR, 0, 0, (columnName + ":").c_str());
+    if(highlight) columnPrintFill(HIGHLIGHT_COLOR, 0, 0, "%s", (columnName + ":").c_str());
+    else columnPrintFill(COLUMN_HEADER_COLOR, 0, 0, "%s", (columnName + ":").c_str());
 
     // redraw column data
     for(line = 0; line < this->height - 1 && line < columnData.size(); line++){
-        columnPrintFill(LINE_COLOR, 0, line + 1, columnData[line].c_str());
+        columnPrintFill(LINE_COLOR, 0, line + 1, "%s", columnData[line].c_str());
     }
 }
 
@@ -128,8 +128,8 @@ void Column::clearColumn()
     werase(this->win);
 
     // redraw header
-    if(highlight) columnPrintFill(HIGHLIGHT_COLOR, 0, 0, (columnName + ":").c_str());
-    else columnPrintFill(COLUMN_HEADER_COLOR, 0, 0, (columnName + ":").c_str());
+    if(highlight) columnPrintFill(HIGHLIGHT_COLOR, 0, 0, "%s", (columnName + ":").c_str());
+    else columnPrintFill(COLUMN_HEADER_COLOR, 0, 0, "%s", (columnName + ":").c_str());
 }
 
 void Column::refreshColumn()
@@ -162,11 +162,14 @@ void Column::columnPrintFill(int colorPair, int x, int y, const char * fmt, ...)
     va_start(args, fmt);
     std::string result;
     int len = vsnprintf(nullptr, 0, fmt, args)+1;
+    va_end(args);
 
     if(len > 0)
     {
         result.resize(len);
+        va_start(args, fmt);
         vsnprintf(&result.front(), len, fmt, args);
+        va_end(args);
     }
 
     waddnstr(win, result.c_str(), this->width-COLUMN_PADDING);
