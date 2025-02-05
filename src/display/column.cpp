@@ -173,7 +173,6 @@ void Column::columnPrintFill(int colorPair, int x, int y, const char * fmt, ...)
     }
 
     waddnstr(win, result.c_str(), this->width-COLUMN_PADDING);
-    va_end(args);
 
     // get current cursor position
     cursorX = getcurx(win);
