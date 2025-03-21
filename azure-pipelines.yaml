@@ -28,7 +28,7 @@ stages:
    jobs:
     - job: "Build_Procmon"
       pool:
-        vmImage: "ubuntu-20.04"
+        vmImage: "ubuntu-22.04"
       timeoutInMinutes: 240
       steps:
       - checkout: self
