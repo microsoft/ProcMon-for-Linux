@@ -286,8 +286,7 @@ if (DEBUG_K)
 endif()
 
 set(CLANG_INCLUDES
-                   -I "/usr/include"
-                   -I "/usr/include/x86_64-linux-gnu"
+                   -I "${CMAKE_SOURCE_DIR}/gnu"
                    -I "${CMAKE_SOURCE_DIR}"
                    -I "/opt/sysinternalsEBPF/ebpfKern"
                    -I "/opt/sysinternalsEBPF/libbpf"
@@ -301,7 +300,7 @@ set(EBPF_CORE_PROG_SUFFIX "_core")
 #
 function(build_ebpf ebpfsrc suffix)
     add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/${ebpfsrc}${suffix}.o
-                       COMMAND "${CLANG}" -nostdinc -isystem `gcc -print-file-name=include` ${CLANG_INCLUDES} ${CLANG_DEFINES} -O2 ${CLANG_OPTIONS} -target bpf -fno-stack-protector -c "${PROCMON_EBPF_SRC}/${ebpfsrc}.c" -o "${PROJECT_BINARY_DIR}/${ebpfsrc}${suffix}.o"
+                       COMMAND "${CLANG}" -nostdinc ${CLANG_INCLUDES} -isystem "/usr/include" -isystem "/usr/include/x86_64-linux-gnu"  -isystem `gcc -print-file-name=include` ${CLANG_DEFINES} -O2 ${CLANG_OPTIONS} -target bpf -fno-stack-protector -c "${PROCMON_EBPF_SRC}/${ebpfsrc}.c" -o "${PROJECT_BINARY_DIR}/${ebpfsrc}${suffix}.o"
                        COMMENT "Building EBPF object ${ebpfsrc}${suffix}.o"
                        DEPENDS ${PROCMON_EBPF_SRC}/${ebpfsrc}.c ${EBPF_DEPENDS}
                        )
