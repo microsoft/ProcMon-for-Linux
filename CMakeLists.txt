@@ -91,14 +91,26 @@ set(PACKAGE_NAME "procmon")
 #
 set(PROCMON_COMPRESS_MAN "procmon.1.gz")
 
+execute_process(
+    COMMAND date "+%d %b %Y"
+    OUTPUT_VARIABLE BUILD_DATE
+    OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+configure_file(
+    "${CMAKE_SOURCE_DIR}/procmon_template.1"
+    "${PROJECT_BINARY_DIR}/procmon.1"
+    @ONLY
+)
+
 add_custom_target(procmonManPageCompress ALL
                   DEPENDS ${PROJECT_BINARY_DIR}/${PROCMON_COMPRESS_MAN}
                   )
 
 add_custom_command(OUTPUT ${PROJECT_BINARY_DIR}/${PROCMON_COMPRESS_MAN}
-                   COMMAND gzip -9n -f -c "${CMAKE_SOURCE_DIR}/procmon.1" > ${PROJECT_BINARY_DIR}/${PROCMON_COMPRESS_MAN}
+                   COMMAND gzip -9n -f -c "${PROJECT_BINARY_DIR}/procmon.1" > ${PROJECT_BINARY_DIR}/${PROCMON_COMPRESS_MAN}
                    COMMENT "Compressing Procmon man page"
-                   DEPENDS "${CMAKE_SOURCE_DIR}/procmon.1"
+                   DEPENDS "${PROJECT_BINARY_DIR}/procmon.1"
                   )
 
 #
