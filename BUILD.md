@@ -13,6 +13,12 @@ If you installed SysinternalsEBPF via make install, you may need to add /usr/loc
 
 - clang/llvm v10+
 
+### Azure Linux
+```
+sudo dnf update
+sudo dnf install gcc gcc-c++ make cmake llvm clang elfutils-libelf-devel rpm-build json-glib-devel python3 libxml2-devel openssl-devel ncurses-devel
+```
+
 ### Ubuntu 20.04+
 ```
 sudo apt update
