@@ -23,6 +23,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <cstring>
 
 #include "kern/procmonEBPF_common.h"
 #include "syscalls.h"
@@ -82,7 +83,7 @@
                 if (syscall.entrypoint.compare(0, 4, "sys_") == 0)
                 {
                     std::string sysDir = "sys_enter_" + syscall.entrypoint.substr(4);
-                    std::strcpy(schema.syscallName, syscall.name.c_str());
+                    strcpy(schema.syscallName, syscall.name.c_str());
 
                     std::string filePath = "/sys/kernel/debug/tracing/events/syscalls/" + sysDir + "/format";
                     std::ifstream file(filePath);
@@ -106,7 +107,7 @@
 
                             std::string argName = res.substr(lastPos+1, res.length()-lastPos-1);
                             std::string argType = res.substr(0, lastPos);
-                            std::strcpy(schema.argNames[argCount], argName.c_str());
+                            strcpy(schema.argNames[argCount], argName.c_str());
                             schema.types[argCount] = GetArgTagForArg(argName, argType);
                             argCount++;
                         }
