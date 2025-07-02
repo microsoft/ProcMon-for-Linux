@@ -20,6 +20,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <stdint.h>
 
 struct StackTrace
 {
