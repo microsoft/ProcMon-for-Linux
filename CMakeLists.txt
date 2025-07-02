@@ -56,10 +56,21 @@ endif()
 set(PROJECT_VERSION_TWEAK 0)
 file(READ "dist/changelog" CHANGE_LOG)
 
-#
-# make ncurses a requirement
-#
-find_package(Curses REQUIRED)
+# Find ncursesw version 6
+find_library(NCURSESW6_LIBRARY NAMES ncursesw.so.6 ncursesw PATHS /usr/lib /usr/lib64 /lib /lib64)
+find_path(NCURSESW6_INCLUDE_DIR NAMES ncursesw/ncurses.h ncurses.h PATHS /usr/include /usr/local/include)
+
+if(NOT NCURSESW6_LIBRARY)
+    message(FATAL_ERROR "libncursesw.so.6 not found. Please install ncursesw version 6.")
+endif()
+if(NOT NCURSESW6_INCLUDE_DIR)
+    message(FATAL_ERROR "ncursesw.h not found. Please install ncurses-devel.")
+endif()
+
+find_library(PANELW6_LIBRARY NAMES panelw.so.6 panelw PATHS /usr/lib /usr/lib64 /lib /lib64)
+if(NOT PANELW6_LIBRARY)
+    message(FATAL_ERROR "libpanelw.so.6 not found. Please install ncursesw version 6.")
+endif()
 
 set(LD "/usr/bin/ld")
 
@@ -204,8 +215,8 @@ target_include_directories(procmon PUBLIC
 target_link_libraries(procmon
                       sysinternalsEBPF
                       sqlite3-static
-                      ${CURSES_LIBRARIES}
-                      -lpanel
+                      ${NCURSESW6_LIBRARY}
+                      ${PANELW6_LIBRARY}
                       elf
                       stdc++fs
                      )
