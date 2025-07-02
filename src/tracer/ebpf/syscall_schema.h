@@ -83,8 +83,10 @@
                 if (syscall.entrypoint.compare(0, 4, "sys_") == 0)
                 {
                     std::string sysDir = "sys_enter_" + syscall.entrypoint.substr(4);
-                    strcpy(schema.syscallName, syscall.name.c_str());
-
+                    int syscallNameLen = sizeof(schema.syscallName) / sizeof(schema.syscallName[0]);
+                    strncpy(schema.syscallName, syscall.name.c_str(), syscallNameLen -1);
+                    schema.syscallName[syscallNameLen - 1] = '\0';
+                    
                     std::string filePath = "/sys/kernel/debug/tracing/events/syscalls/" + sysDir + "/format";
                     std::ifstream file(filePath);
 
@@ -107,7 +109,9 @@
 
                             std::string argName = res.substr(lastPos+1, res.length()-lastPos-1);
                             std::string argType = res.substr(0, lastPos);
-                            strcpy(schema.argNames[argCount], argName.c_str());
+                            int argLen = sizeof(schema.argNames[argCount]) / sizeof(schema.argNames[argCount][0]);
+                            strncpy(schema.argNames[argCount], argName.c_str(), argLen -1);
+                            schema.argNames[argCount][argLen -1] = '\0';
                             schema.types[argCount] = GetArgTagForArg(argName, argType);
                             argCount++;
                         }
