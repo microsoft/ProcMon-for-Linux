@@ -5,5 +5,5 @@ Maintainer: Sysinternals <syssite@microsoft.com>
 Description: Sysinternals process monitor utility
  Process Monitor (Procmon) is part of the Sysinternals suite of tools.  Procmon provides a convenient and efficient way for Linux developers to trace the syscall
  activity on the system.
-Depends: sysinternalsebpf (>= 1.4), libelf1 (>= 0.0)
+Depends: sysinternalsebpf (>= 1.5.0), libelf1 (>= 0.0)
 License: MIT
