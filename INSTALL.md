@@ -1,6 +1,10 @@
 # Install Procmon
 
-## Ubuntu 20.04, 22.04, 24.04
+## Azure Linux 3
+```sh
+sudo dnf install procmon
+```
+## Ubuntu
 #### 1. Register Microsoft key and feed
 ```sh
 wget -q https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
@@ -13,106 +17,34 @@ sudo apt-get update
 sudo apt-get install procmon
 ```
 
-## Debian 11
+## Debian
 #### 1. Register Microsoft key and feed
 ```sh
-wget -q https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+wget -q https://packages.microsoft.com/config/debian/$(. /etc/os-release && echo ${VERSION_ID%%.*})/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
 sudo dpkg -i packages-microsoft-prod.deb
 ```
 
 #### 2. Install Procmon
 ```sh
 sudo apt-get update
-sudo apt-get install apt-transport-https
+sudo apt-get install procmon
+```
+## Fedora
+#### 1. Register Microsoft key and feed
+```sh
+sudo rpm -Uvh https://packages.microsoft.com/config/fedora/$(rpm -E %fedora)/packages-microsoft-prod.rpm
+```
+
+#### 2. Install Procmon
+```sh
 sudo apt-get update
 sudo apt-get install procmon
 ```
 
-## Debian 12
+## RHEL
 #### 1. Register Microsoft key and feed
 ```sh
-wget -q https://packages.microsoft.com/config/debian/12/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
-sudo dpkg -i packages-microsoft-prod.deb
-```
-
-#### 2. Install Procmon
-```sh
-sudo apt-get update
-sudo apt-get install apt-transport-https
-sudo apt-get update
-sudo apt-get install procmon
-```
-
-## Fedora 38
-#### 1. Register Microsoft key and feed
-```sh
-sudo rpm -Uvh https://packages.microsoft.com/config/fedora/38/packages-microsoft-prod.rpm
-```
-
-#### 2. Install Procmon
-```sh
-sudo dnf install procmon
-```
-
-## Fedora 39
-#### 1. Register Microsoft key and feed
-```sh
-sudo rpm -Uvh https://packages.microsoft.com/config/fedora/39/packages-microsoft-prod.rpm
-```
-
-#### 2. Install Procmon
-```sh
-sudo dnf install procmon
-```
-
-## Fedora 40
-#### 1. Register Microsoft key and feed
-```sh
-sudo rpm -Uvh https://packages.microsoft.com/config/fedora/40/packages-microsoft-prod.rpm
-```
-
-#### 2. Install Procmon
-```sh
-sudo dnf install procmon
-```
-
-## RHEL 7
-#### 1. Register Microsoft key and feed
-```sh
-sudo rpm -Uvh https://packages.microsoft.com/config/rhel/7/packages-microsoft-prod.rpm
-```
-
-#### 2. Install Procmon
-```sh
-sudo yum install procmon
-```
-
-## RHEL 8
-#### 1. Register Microsoft key and feed
-```sh
-sudo rpm -Uvh https://packages.microsoft.com/config/rhel/8/packages-microsoft-prod.rpm
-```
-
-#### 2. Install Procmon
-```sh
-sudo yum install procmon
-```
-
-## RHEL 9
-#### 1. Register Microsoft key and feed
-```sh
-sudo rpm -Uvh https://packages.microsoft.com/config/rhel/9/packages-microsoft-prod.rpm
-```
-
-#### 2. Install Procmon
-```sh
-sudo yum install procmon
-```
-
-## CentOS 7
-#### 1. Register Microsoft key and feed
-```sh
-sudo rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
+sudo rpm -Uvh https://packages.microsoft.com/config/rhel/$(. /etc/os-release && echo ${VERSION_ID%%.*})/packages-microsoft-prod.rpm
 ```
 
 #### 2. Install Procmon
