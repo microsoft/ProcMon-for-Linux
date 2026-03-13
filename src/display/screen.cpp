@@ -1542,7 +1542,7 @@ void Screen::showDetailView()
     mvwprintw(detailWin, y++, 2, "%-20s%s", "Arguments:", format->GetDetails(*event).c_str());
     mvwprintw(detailWin, y++, 2, "%-20s%s", "Result:", format->GetResult(*event).c_str());
 
-    mvwprintw(detailWin, y++, 2, "%-20s%llu ns", "Duration:", format->GetDuration(*event).c_str());
+    mvwprintw(detailWin, y++, 2, "%-20s%s ns", "Duration:", format->GetDuration(*event).c_str());
     y++;
 
     // grab stack trace for current event
@@ -1555,7 +1555,7 @@ void Screen::showDetailView()
         // add stack trace to window
         for(int i = 0; i < eventTrace->userIPs.size() && y < detailViewHeight - 1; i++)
         {
-            mvwprintw(detailWin, y++, 4, "0x%-8X %s", eventTrace->userIPs[i], eventTrace->userSymbols[i].c_str());
+            mvwprintw(detailWin, y++, 4, "0x%-8lX %s", eventTrace->userIPs[i], eventTrace->userSymbols[i].c_str());
         }
     }
 
