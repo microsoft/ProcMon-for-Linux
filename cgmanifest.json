@@ -27,11 +27,11 @@
                 "Type": "other",
                 "Other": {
                     "Name": "sqlite",
-                    "Version": "3.27.2",
-                    "DownloadUrl": "https://www.sqlite.org/2019/sqlite-autoconf-3270200.tar.gz"
+                    "Version": "3.51.3",
+                    "DownloadUrl": "https://www.sqlite.org/2026/sqlite-autoconf-3510300.tar.gz"
                 }
             },
             "DevelopmentDependency" : true
-        }        
+        }
     ]
 }
