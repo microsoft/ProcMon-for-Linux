@@ -8,15 +8,26 @@ parameters:
 - name: builddir
   type: string
   default: 'build'
+- name: ldpath
+  type: string
+  default: ''    
 
 steps:
 - script: |
+    if [ -n "${{ parameters.ldpath }}" ]; then
+        export LD_LIBRARY_PATH="${{ parameters.ldpath }}:$LD_LIBRARY_PATH"
+    fi
+
     mkdir -p ${{ parameters.srcPath }}/${{ parameters.builddir }} && cd ${{ parameters.srcPath }}/${{ parameters.builddir }}
     cmake ..
     make
   displayName: "Build Procmon binaries"
 
 - script: |
+    if [ -n "${{ parameters.ldpath }}" ]; then
+        export LD_LIBRARY_PATH="${{ parameters.ldpath }}:$LD_LIBRARY_PATH"
+    fi
+    
     if [ ${{ parameters.runStaticAnalysis }} == True ]; then
       rm -rf ${{ parameters.srcPath }}/${{ parameters.builddir }} && mkdir -p ${{ parameters.srcPath }}/${{ parameters.builddir }} && cd ${{ parameters.srcPath }}/${{ parameters.builddir }}
       scan-build cmake ..
