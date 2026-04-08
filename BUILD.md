@@ -25,7 +25,7 @@ sudo apt update
 sudo apt -y install build-essential gcc g++ make cmake libelf-dev llvm clang libxml2 libxml2-dev libzstd1 git libgtest-dev apt-transport-https dirmngr libjson-glib-dev libssl-dev
 ```
 
-### Rocky 9
+### Rocky 9+
 ```
 sudo dnf install dnf-plugins-core
 sudo dnf config-manager --set-enabled crb
@@ -42,6 +42,11 @@ sudo dnf install epel-release
 sudo dnf config-manager --set-enabled powertools
 
 sudo dnf update
+sudo yum install gcc gcc-c++ make cmake llvm clang elfutils-libelf-devel rpm-build json-glib-devel python3 libxml2-devel openssl-devel ncurses-devel
+```
+
+### Fedora
+```
 sudo yum install gcc gcc-c++ make cmake llvm clang elfutils-libelf-devel rpm-build json-glib-devel python3 libxml2-devel openssl-devel ncurses-devel
 ```
 
