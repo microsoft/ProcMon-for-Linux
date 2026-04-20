@@ -210,6 +210,9 @@ ITelemetry Sqlite3StorageEngine::parseSqlite3Row(sqlite3_stmt *preppedSqlStmt)
             // Interestingly enough, if we don't copy the blob we get back from sqlite it can eventually
             // reuse that memory buffer and change the contents of the record.
             datam.arguments = (unsigned char*) malloc(MAX_BUFFER);
+            if(datam.arguments == nullptr){
+                break; // I'm not sure if breaking is the right way of handling nullptr here.
+            }
             memcpy(datam.arguments, arguments, MAX_BUFFER);
         }
         else if (columnName == "timestamp")

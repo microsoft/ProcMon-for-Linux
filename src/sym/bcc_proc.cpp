@@ -101,6 +101,9 @@ static char *_procutils_memfd_path(const int pid, const uint64_t inum) {
 
   snprintf(path_buffer, (PATH_MAX + 1), "/proc/%d/fd", pid);
   dirstr = (char*) malloc(strlen(path_buffer) + 1);
+  if(dirstr == nullptr){
+    return NULL;
+  }
   strcpy(dirstr, path_buffer);
   dirstream = opendir(dirstr);
 
@@ -116,6 +119,9 @@ static char *_procutils_memfd_path(const int pid, const uint64_t inum) {
 
     if (sb.st_ino == inum) {
       char *pid_fd_path = (char*) malloc(strlen(path_buffer) + 1);
+      if(pid_fd_path == nullptr){
+        return NULL; 
+      }
       strcpy(pid_fd_path, path_buffer);
       path = pid_fd_path;
     }
@@ -361,6 +367,9 @@ static int read_cache1(const char *ld_map) {
 
   lib_cache =
       (struct ld_lib *)malloc(ldcache->entry_count * sizeof(struct ld_lib));
+  if(lib_cache == nullptr ){
+    return -1;
+  }
   lib_cache_count = (int)ldcache->entry_count;
 
   for (i = 0; i < ldcache->entry_count; ++i) {
@@ -384,6 +393,10 @@ static int read_cache2(const char *ld_map) {
 
   lib_cache =
       (struct ld_lib *)malloc(ldcache->entry_count * sizeof(struct ld_lib));
+  if(lib_cache == nullptr){
+    return -1;
+  }
+
   lib_cache_count = (int)ldcache->entry_count;
 
   for (i = 0; i < ldcache->entry_count; ++i) {

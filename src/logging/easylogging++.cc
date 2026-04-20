@@ -1019,12 +1019,17 @@ char* Str::wcharPtrToCharPtr(const wchar_t* line) {
   std::size_t len_ = wcslen(line) + 1;
   char* buff_ = static_cast<char*>(malloc(len_ + 1));
 #      if ELPP_OS_UNIX || (ELPP_OS_WINDOWS && !ELPP_CRT_DBG_WARNINGS)
-  std::wcstombs(buff_, line, len_);
+  if(buff_ != nullptr){
+    std::wcstombs(buff_, line, len_);
+  }
+  
 #      elif ELPP_OS_WINDOWS
   std::size_t convCount_ = 0;
   mbstate_t mbState_;
   ::memset(static_cast<void*>(&mbState_), 0, sizeof(mbState_));
-  wcsrtombs_s(&convCount_, buff_, len_, &line, len_, &mbState_);
+  if(buff_ != nullptr){
+    wcsrtombs_s(&convCount_, buff_, len_, &line, len_, &mbState_);
+  }
 #      endif  // ELPP_OS_UNIX || (ELPP_OS_WINDOWS && !ELPP_CRT_DBG_WARNINGS)
   return buff_;
 }
@@ -2261,8 +2266,10 @@ void DefaultLogDispatchCallback::dispatch(base::type::string_t&& logLine) {
       sysLogPriority = LOG_NOTICE;
 #  if defined(ELPP_UNICODE)
     char* line = base::utils::Str::wcharPtrToCharPtr(logLine.c_str());
-    syslog(sysLogPriority, "%s", line);
-    free(line);
+    if(line != nullptr){
+      syslog(sysLogPriority, "%s", line);
+      free(line);
+    }
 #  else
     syslog(sysLogPriority, "%s", logLine.c_str());
 #  endif
@@ -2371,8 +2378,11 @@ void AsyncDispatchWorker::handle(AsyncLogItem* logItem) {
       sysLogPriority = LOG_NOTICE;
 #      if defined(ELPP_UNICODE)
     char* line = base::utils::Str::wcharPtrToCharPtr(logLine.c_str());
-    syslog(sysLogPriority, "%s", line);
-    free(line);
+    if(line != nullptr){
+      syslog(sysLogPriority, "%s", line);
+      free(line);
+    }
+    
 #      else
     syslog(sysLogPriority, "%s", logLine.c_str());
 #      endif
@@ -2518,8 +2528,11 @@ MessageBuilder& MessageBuilder::operator<<(const wchar_t* msg) {
   m_logger->stream() << msg;
 #  else
   char* buff_ = base::utils::Str::wcharPtrToCharPtr(msg);
-  m_logger->stream() << buff_;
-  free(buff_);
+  if(buff_ != nullptr){
+    m_logger->stream() << buff_;
+    free(buff_);
+  }
+  
 #  endif
   if (ELPP->hasFlag(LoggingFlag::AutoSpacing)) {
     m_logger->stream() << " ";

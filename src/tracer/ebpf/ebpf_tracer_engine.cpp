@@ -547,6 +547,11 @@ void EbpfTracerEngine::Consume()
 
         tel.duration = event->duration_ns;
         tel.arguments = (unsigned char*) malloc(MAX_BUFFER);
+        if(tel.arguments == nullptr){
+            LOG(ERROR) << "tell.arguments is NULL";
+            return;
+        }
+
         memset(tel.arguments, 0, MAX_BUFFER);
         memcpy(tel.arguments, event->buffer, MAX_BUFFER);
         tel.timestamp = event->timestamp;
