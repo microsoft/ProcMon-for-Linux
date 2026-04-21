@@ -28,6 +28,10 @@
 #define NCURSES_OK 0
 
 #include <panel.h>
+#include <cstdint>
+#include <map>
+#include <memory>
+#include <string>
 #include <vector>
 #include <unordered_map>
 
