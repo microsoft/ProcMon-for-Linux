@@ -119,16 +119,19 @@ static char *_procutils_memfd_path(const int pid, const uint64_t inum) {
 
     if (sb.st_ino == inum) {
       char *pid_fd_path = (char*) malloc(strlen(path_buffer) + 1);
-      if(pid_fd_path == nullptr){
-        return NULL; 
+      if(pid_fd_path == nullptr){,
+        break;
       }
       strcpy(pid_fd_path, path_buffer);
       path = pid_fd_path;
     }
   }
-  closedir(dirstream);
-  free(dirstr);
-
+  if(dirstream){
+    closedir(dirstream);
+  }
+  if(dirstr){
+    free(dirstr);
+  }
   return path;
 }
 

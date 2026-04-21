@@ -862,6 +862,7 @@ void Screen::initStatView()
     statPanel = new_panel(statWin);
     if(statPanel == nullptr){
         LOG(ERROR) << "statPanel is NULL";
+        return;
     }
     statViewActive = false;
 
