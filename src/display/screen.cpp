@@ -661,7 +661,16 @@ void Screen::drawHeader()
 void Screen::initFooter()
 {
     footerWin = newwin(FOOTER_HEIGHT, screenW, screenH - 1, FOOTER_X);
+    if(footerWin == nullptr){
+        LOG(ERROR) << "footerWin is NULL";
+        return;
+    }
+    
     footerPanel = new_panel(footerWin);
+    if(footerPanel == nullptr) {
+        LOG(ERROR) << "footerPanel is NULL";
+        return;
+    }
 
     // print f-key controls
     drawFooterFkeys();
@@ -845,8 +854,16 @@ void Screen::initStatView()
     int statWindow_X = screenW / 6;
 
     statWin = newwin(statWindowHeight, statWindowWidth, statWindow_Y, statWindow_X);
-    statPanel = new_panel(statWin);
+    if(statWin == nullptr){
+        LOG(ERROR) << "statWin is NULL";
+        return;
+    }
 
+    statPanel = new_panel(statWin);
+    if(statPanel == nullptr){
+        LOG(ERROR) << "statPanel is NULL";
+        return;
+    }
     statViewActive = false;
 
     hide_panel(statPanel);
@@ -860,8 +877,17 @@ void Screen::initHelpView()
     int helpWindow_X = screenW / 6;
 
     helpWin = newwin(helpWindowHeight, helpWindowWidth, helpWindow_Y, helpWindow_X);
-    helpPanel = new_panel(helpWin);
+    if(helpWin == nullptr){
+        LOG(ERROR) << "helpWin is NULL";
+        return;
+    }
 
+    helpPanel = new_panel(helpWin);
+    if(helpPanel == nullptr){
+        LOG(ERROR) << "helpPanel is NULL";
+        return;
+    }
+    
     helpViewActive = false;
 
     hide_panel(helpPanel);
@@ -876,7 +902,16 @@ void Screen::initDetailView()
     int detailWindow_X = screenW / 6;
 
     detailWin = newwin(detailWindowHeight, detailWindowWidth, detailWindow_Y, detailWindow_X);
+    if(detailWin == nullptr){
+        LOG(ERROR) << "detailWin is NULL";
+        return;
+    }
+
     detailPanel = new_panel(detailWin);
+    if(detailPanel == nullptr){
+        LOG(ERROR) << "detailPanel is NULL";
+        return;
+    }
 
     detailViewActive = false;
 
@@ -1819,6 +1854,11 @@ void Screen::windowPrintFillRight(WINDOW * win, int colorPair, int x, int y, con
 
     // allocate memory to print string
     buffer = (char*)malloc(sizeof(char) * maximumX);
+
+    if(buffer == nullptr){
+        LOG(ERROR) << "buffer is null";
+        return;
+    }
 
     // print string to buffer
     va_list args;
