@@ -30,8 +30,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <sys/syscall.h>
-#include <fcntl.h>
 
 
 #include "bcc_elf.h"
@@ -403,11 +401,7 @@ static int load_ld_cache(const char *cache_path) {
   size_t ld_size;
   const char *ld_map;
 
-  int ret, fd = syscall(SYS_open, cache_path, O_RDONLY, 0);
-  if (fd <= 0)
-  {
-      return -1;
-  }
+  int ret, fd = open(cache_path, O_RDONLY);
 
   if (fd < 0)
     return -1;
