@@ -117,7 +117,7 @@ static inline int PopulateArguments(enum ProcmonArgTag type, unsigned long arg, 
 // Populates the event with the arguments for the syscall.
 // ------------------------------------------------------------------------------------------
 __attribute__((always_inline))
-static inline bool set_eventArgs(unsigned long *a, const struct pt_regs *regs)
+static inline bool set_eventArgs(unsigned long *a, const procmon_pt_regs *regs)
 {
     int ret = 0;
     ret |= bpf_probe_read(&a[0], sizeof(a[0]), &SYSCALL_PT_REGS_PARM1(regs));
@@ -265,7 +265,7 @@ int genericRawEnter(struct bpf_our_raw_tracepoint_args *ctx)
     uint32_t cpuId = bpf_get_smp_processor_id();
     uint64_t pidTid = bpf_get_current_pid_tgid();
     int pid = pidTid >> 32;
-    struct pt_regs* regs = NULL;
+    procmon_pt_regs* regs = NULL;
 
     //
     // Check all filters
@@ -304,7 +304,7 @@ int genericRawEnter(struct bpf_our_raw_tracepoint_args *ctx)
     sysEntry->userStackCount = bpf_get_stack(ctx, &sysEntry->userStack, MAX_STACK_FRAMES * sizeof(uint64_t), BPF_F_USER_STACK) / sizeof(uint64_t);
     sysEntry->timestamp = bpf_ktime_get_ns();
 
-    regs = (struct pt_regs *)ctx->args[0];
+    regs = (procmon_pt_regs *)ctx->args[0];
     unsigned long a[8];
     if (!set_eventArgs(a, regs))
     {

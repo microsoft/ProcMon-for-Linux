@@ -34,7 +34,7 @@ __attribute__((flatten))
 int genericRawExit(struct bpf_our_raw_tracepoint_args *ctx)
 {
     uint64_t pidTid = bpf_get_current_pid_tgid();
-    const struct pt_regs *regs = (const struct pt_regs *)ctx->args[0];
+    const procmon_pt_regs *regs = (const procmon_pt_regs *)ctx->args[0];
     int pid = pidTid >> 32;
 
     //
