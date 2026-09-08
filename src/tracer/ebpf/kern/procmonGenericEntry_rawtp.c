@@ -22,6 +22,9 @@
 
 #ifdef EBPF_CO_RE
 #include "vmlinux.h"
+typedef __u32 __uint32_t;
+typedef __u64 __uint64_t;
+#define _STDINT_H
 #else
 #include <linux/version.h>
 #include <linux/bpf.h>
@@ -33,9 +36,9 @@
 #include <linux/string.h>
 #include <asm/ptrace.h>
 #include <linux/types.h>
+#include <stdint.h>
 #endif
 
-#include <stdint.h>
 #include <bpf_helpers.h>
 #include <bpf_core_read.h>
 #include <asm/unistd_64.h>
