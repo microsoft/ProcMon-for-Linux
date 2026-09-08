@@ -367,6 +367,3 @@ add_custom_target(run_getsyscalls
     DEPENDS getsyscalls
     COMMENT "Running getsyscalls"
 )
-
-# Add dependencies to ensure parse_syscalls runs before other targets
-add_dependencies(procmon run_getsyscalls)
