@@ -26,7 +26,6 @@
 #include <sys/sysmacros.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include <sys/syscall.h>
 
 #include <cstdio>
 #include <cstring>
@@ -56,7 +55,7 @@ ProcSyms::ModulePath::ModulePath(const std::string &ns_path, int root_fd,
     ;
   trimmed_path = ns_path.substr(non_slash_pos);
 
-  int fd_ = syscall(SYS_openat, root_fd, trimmed_path.c_str(), O_RDONLY);
+  fd_ = openat(root_fd, trimmed_path.c_str(), O_RDONLY);
   if (fd_ > 0)
     path_ = tfm::format("/proc/self/fd/%d", fd_);
   else
@@ -93,7 +92,7 @@ bool ProcStat::refresh_root() {
   // re-open root note: when /proc/.../root changes, the open file descriptor
   // still refers to the old one
   int original_root_fd = root_fd_;
-  int root_fd_ = syscall(SYS_open, root_symlink_.c_str(), O_PATH);
+  root_fd_ = open(root_symlink_.c_str(), O_PATH);
   if (root_fd_ == -1)
     std::cerr << "Opening " << root_symlink_ << " failed: " << strerror(errno)
               << std::endl;
