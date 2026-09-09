@@ -19,7 +19,6 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <unistd.h>
-#include <sys/syscall.h>
 #include <string.h>
 #include <libgen.h>
 #include <stdio.h>
@@ -142,7 +141,7 @@ static int bcc_elf_file_open(const char *path, struct bcc_elf_file *out) {
   struct bcc_zip_entry entry;
   int fd = -1;
 
-  fd = syscall(SYS_open, path, O_RDONLY, 0);
+  fd = open(path, O_RDONLY);
   if (fd >= 0) {
     if (bcc_elf_file_open_fd(fd, out)) {
       close(fd);
@@ -601,7 +600,7 @@ static int verify_checksum(const char *file, unsigned int crc) {
   unsigned int actual;
 
 
-  fd = syscall(SYS_open, file, O_RDONLY, 0);
+  fd = open(file, O_RDONLY);
   if (fd < 0)
     return 0;
 
