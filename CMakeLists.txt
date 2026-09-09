@@ -137,6 +137,7 @@ configure_file ("${PROJECT_SOURCE_DIR}/src/version.h.in"
                 "${PROJECT_BINARY_DIR}/src/version.h"
                )
 
+include(cmake/PackageArchitecture.cmake)
 configure_file(dist/DEBIAN.in/control.in DEBIANcontrol)
 configure_file(dist/SPECS.in/spec.in SPECS.spec)
 

@@ -37,11 +37,21 @@ PACKAGE_VER=$4
 PACKAGE_REL=$5
 PACKAGE_TYPE=$6
 
-DEB_PACKAGE_NAME="${PACKAGE_NAME}_${PACKAGE_VER}_amd64"
 RPM_PACKAGE_NAME="${PACKAGE_NAME}-${PACKAGE_VER}-${PACKAGE_REL}"
 
 if [ "$PACKAGE_TYPE" = "deb" ]; then
-    DPKGDEB=`which dpkg-deb`
+    # Fail on staging errors and propagate dpkg-deb failures to the build job.
+    set -e
+    DPKGDEB=$(command -v dpkg-deb) || { echo "No dpkg-deb found" >&2; exit 1; }
+
+    # CMake configures the target architecture once in DEBIANcontrol. Use it
+    # for the filename too, including when cross-compiling on an x64 host.
+    DEB_ARCH=$(sed -n 's/^Architecture: *//p' "${PROJECT_BINARY_DIR}/DEBIANcontrol" | tr -d '\r')
+    case "$DEB_ARCH" in
+        amd64|arm64) ;;
+        *) echo "Unsupported or missing Debian architecture: $DEB_ARCH" >&2; exit 1 ;;
+    esac
+    DEB_PACKAGE_NAME="${PACKAGE_NAME}_${PACKAGE_VER}_${DEB_ARCH}"
 
     if [ -d "${PROJECT_BINARY_DIR}/deb" ]; then
         rm -rf "${PROJECT_BINARY_DIR}/deb"
@@ -60,16 +70,9 @@ if [ "$PACKAGE_TYPE" = "deb" ]; then
     cp "${PROJECT_BINARY_DIR}/procmon" "${PROJECT_BINARY_DIR}/deb/${DEB_PACKAGE_NAME}/usr/bin/"
 
     # make the deb
-    if [ "$DPKGDEB" != "" ]; then
-        cd "${PROJECT_BINARY_DIR}/deb"
-        "$DPKGDEB" -Zxz --build --root-owner-group "${DEB_PACKAGE_NAME}"
-        RET=$?
-    else
-        echo "No dpkg-deb found"
-        RET=1
-    fi
-
-    exit 0
+    cd "${PROJECT_BINARY_DIR}/deb"
+    "$DPKGDEB" -Zxz --build --root-owner-group "${DEB_PACKAGE_NAME}"
+    exit $?
 fi
 
 if [ "$PACKAGE_TYPE" = "rpm" ]; then
