@@ -1,6 +1,6 @@
 Package: procmon
 Version: @PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@
-Architecture: amd64
+Architecture: @DEB_ARCH@
 Maintainer: Sysinternals <syssite@microsoft.com>
 Description: Sysinternals process monitor utility
  Process Monitor (Procmon) is part of the Sysinternals suite of tools.  Procmon provides a convenient and efficient way for Linux developers to trace the syscall
