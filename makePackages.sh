@@ -90,7 +90,11 @@ if [ "$PACKAGE_TYPE" = "rpm" ]; then
         cd "${PROJECT_BINARY_DIR}/rpm/${RPM_PACKAGE_NAME}"
         "$RPMBUILD" --define "_topdir `pwd`" -v -bb "SPECS/${RPM_PACKAGE_NAME}.spec"
         RET=$?
-        cp RPMS/x86_64/*.rpm ..
+        if [ "$RET" -eq 0 ]; then
+            RPM_ARCH=`"$RPMBUILD" --eval '%{_arch}'`
+            cp "RPMS/${RPM_ARCH}/"*.rpm ..
+            RET=$?
+        fi
     else
         echo "No rpmbuild found"
         RET=1
