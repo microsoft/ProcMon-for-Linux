@@ -116,7 +116,6 @@ void Screen::run()
     ProcmonConfiguration * config = configPtr.get();
     auto storageEngine = config->GetStorage();
     MEVENT mouseEvent;
-    int scrollCount = 0;
     std::chrono::_V2::steady_clock::time_point previousTime = std::chrono::steady_clock::now();
     std::chrono::_V2::steady_clock::time_point currentTime;
     int nonRefreshCount = 0;
@@ -367,21 +366,13 @@ void Screen::run()
                     break;
 
                 case KEY_PPAGE:
-                    if (scrollCount < MAX_CONTINUOUS_SCROLL || prevInput != KEY_PPAGE)
-                    {
-                        pageUp();
-                        (KEY_PPAGE == prevInput) ? scrollCount++ : scrollCount = 0;
-                        if(detailViewActive) closeDetailView();
-                    }
+                    pageUp();
+                    if(detailViewActive) closeDetailView();
                     break;
 
                 case KEY_NPAGE:
-                    if (scrollCount < MAX_CONTINUOUS_SCROLL || prevInput != KEY_NPAGE)
-                    {
-                        pageDown();
-                        (KEY_NPAGE == prevInput) ? scrollCount++ : scrollCount = 0;
-                        if(detailViewActive) closeDetailView();
-                    }
+                    pageDown();
+                    if(detailViewActive) closeDetailView();
                     break;
 
                 // ncurses key_enter or ascii value 10 for enter key
@@ -471,7 +462,8 @@ void Screen::run()
                     if(detailViewActive) showDetailView();
                     break;
 
-                // CTRL + END
+                // END or CTRL + END
+                case KEY_END:
                 case 530:
                     // if the number of events is evenly divisible then the last "page" has nothing to visualize
                     if (storageEngine->Size() % totalLines == 0)
@@ -489,7 +481,8 @@ void Screen::run()
                     displayEvents(eventList);
                     break;
 
-                // CTRL + HOME
+                // HOME or CTRL + HOME
+                case KEY_HOME:
                 case 535:
                     currentPage = 0;
 
@@ -1447,19 +1440,19 @@ void Screen::showHelpView()
     y+=2;
 
     // print column labels
-    windowPrintFill(helpWin, LINE_COLOR, 1, y, " %-35s %-15s", "Arrows: scroll event list", "Enter: Display event properties");
+    windowPrintFill(helpWin, LINE_COLOR, 1, y, " %-35s %-15s", "Arrows/PgUp/PgDn: scroll events", "Home/End: first/last page");
     y++;
 
-    windowPrintFill(helpWin, LINE_COLOR, 1, y, " %-35s %-15s", "F2: Sort by column", "F3: Search event list");
+    windowPrintFill(helpWin, LINE_COLOR, 1, y, " %-35s %-15s", "Enter: Display event properties", "F2: Sort by column");
     y++;
 
-    windowPrintFill(helpWin, LINE_COLOR, 1, y, " %-35s %-15s", "F4: Filter event list", "F5: Suspend/resume event collection");
+    windowPrintFill(helpWin, LINE_COLOR, 1, y, " %-35s %-15s", "F3: Search event list", "F4: Filter event list");
     y++;
 
-    windowPrintFill(helpWin, LINE_COLOR, 1, y, " %-35s %-15s", "F6: Export event list to file", "F8: Show stat of top syscalls");
+    windowPrintFill(helpWin, LINE_COLOR, 1, y, " %-35s %-15s", "F5: Suspend/resume event collection", "F6: Export event list to file");
     y++;
 
-    windowPrintFill(helpWin, LINE_COLOR, 1, y, " %-35s", "F9: Quit");
+    windowPrintFill(helpWin, LINE_COLOR, 1, y, " %-35s %-15s", "F8: Show stat of top syscalls", "F9/Q: Quit");
     y++;
 
     box(helpWin, '|', '_');

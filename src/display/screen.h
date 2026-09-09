@@ -88,7 +88,6 @@
 
 #define FOOTER_X 0
 
-#define MAX_CONTINUOUS_SCROLL   10
 #define MAX_REFRESH_ATTEMPTS    5
 
 // column view constants
